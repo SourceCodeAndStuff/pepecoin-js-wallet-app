@@ -8,6 +8,20 @@ web/      pepecoin-js-wallet-web — optional HTTP server, WebSocket updates and
 data/     existing wallet data (unchanged; never included in the library package)
 ```
 
+## Screenshots
+
+Captured from `npm run preview` (synthetic balances and temporary keys; nothing is broadcast).
+
+| Overview | Receive |
+| --- | --- |
+| ![Overview: available balance, balance breakdown and recent activity](docs/screenshots/overview.png) | ![Receive: payment request with amount, label and QR code](docs/screenshots/receive.png) |
+| **Send** | **Transactions** |
+| ![Send: recipients, fee rate, confirmations and coin selection before review](docs/screenshots/send.png) | ![Transactions: history and pending withdrawals](docs/screenshots/history.png) |
+| **Addresses & coins** | **Security & backup** |
+| ![Addresses and coins: receiving addresses and coin control](docs/screenshots/addresses.png) | ![Security: encrypted backup, restore, key import and spending lock](docs/screenshots/security.png) |
+| **Network** | **Mobile** |
+| ![Network: sync state, peer and heights](docs/screenshots/network.png) | <img src="docs/screenshots/mobile.png" alt="Overview on a phone-sized screen" width="260"> |
+
 ## Run the web wallet
 
 Requires Node.js **24.13.0 or newer**. Storage uses [Node’s built-in SQLite](https://nodejs.org/api/sqlite.html), so this project requires no Python, node-gyp, or C/C++ build tools. Node 24 may print an experimental SQLite warning; this is not an installation failure.
@@ -59,7 +73,7 @@ try {
 }
 ```
 
-The library has no UI, HTTP server, WebSocket server, QR dependency, or implicit listening port. Your Node.js application authorizes spending directly. See [wallet/README.md](wallet/README.md) and [wallet/examples/wallet.js](wallet/examples/wallet.js).
+The library has no UI, HTTP server, WebSocket server, QR dependency, or implicit listening port. Your Node.js application authorizes spending directly. See [wallet/README.md](wallet/README.md) and the runnable programs in [wallet/examples/](wallet/examples): account wallets, a deposit watcher that credits exactly once, a crash-safe withdrawal worker, backup/restore, message signing, coin control, sync status and TypeScript usage.
 
 ## Verification and preview
 
@@ -70,6 +84,10 @@ npm run preview
 
 The preview runs on port 3041 with temporary keys and synthetic funds; transaction relay is disabled. Never fund its addresses.
 
+## Upgrading to this version
+
+The chain index gains a `bits` column on first start; this is automatic and needs no rescan. After updating, the first sync must be confirmed by at least two independent peers before deposits become eligible and withdrawals resume, so expect `waiting` for a short while if few peers are reachable. A withdrawal is now reported `relayed` only after two peers serve it back; a single-peer echo shows as `unverified` (it can still confirm). See [docs/security-review.md](docs/security-review.md) for what changed and why.
+
 ## Safety
 
-One ribbit = 0.00000001 PEPE. Keys are encrypted at rest, but this is a server-managed hot wallet, not a production-audited custodian or a fully validating Core node. Fork rollback is not implemented. A forked index still requires recovery; reorganizing these packages does not repair it. Preserve backups and do not run two processes against the same data directory.
+One ribbit = 0.00000001 PEPE. Keys are encrypted at rest, but this is a server-managed hot wallet, not a production-audited custodian or a fully validating Core node. Block headers are checked for proof of work, merged mining, difficulty and checkpoints, and the tip is cross-checked with independent peers; scripts are not executed. Fork rollback is not implemented. A forked index still requires recovery; reorganizing these packages does not repair it. Preserve backups and do not run two processes against the same data directory.
