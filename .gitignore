@@ -1,0 +1,30 @@
+.env
+.env.local
+.env.*
+!.env.example
+data/
+*wallet-backup*.json
+*wallet*backup*.json
+node_modules/
+*.log
+
+# Local IDE state and generated files
+nbproject/
+coverage/
+*.tgz
+.DS_Store
+Thumbs.db
+
+# Wallet secrets and SQLite files, even outside the default data directory
+wallet-data/
+application-wallet-data/
+*.db
+*.db-*
+*.sqlite
+*.sqlite-*
+*.key
+*.pem
+*.p12
+*.pfx
+users.json
+wallet-server.lock*

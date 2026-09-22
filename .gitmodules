@@ -1,0 +1,6 @@
+[submodule "wallet"]
+	path = wallet
+	url = https://github.com/SourceCodeAndStuff/pepecoin-js-wallet.git
+[submodule "web"]
+	path = web
+	url = https://github.com/SourceCodeAndStuff/pepecoin-js-wallet-web.git
